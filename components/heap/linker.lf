@@ -1,5 +1,4 @@
 [mapping]
 archive: libheap.a
 entries:
-    multi_heap (noflash)
-    multi_heap_poisoning (noflash)
+    malloc (noflash)

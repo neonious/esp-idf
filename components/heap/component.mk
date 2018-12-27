@@ -2,15 +2,10 @@
 # Component Makefile
 #
 
-COMPONENT_OBJS := heap_caps_init.o heap_caps.o multi_heap.o heap_trace.o
+COMPONENT_OBJS := heap_caps_init.o heap_caps.o multi_heap.o heap_trace.o malloc.o
 
-ifndef CONFIG_HEAP_POISONING_DISABLED
-COMPONENT_OBJS += multi_heap_poisoning.o
-
-ifdef CONFIG_HEAP_TASK_TRACKING
-COMPONENT_OBJS += heap_task_info.o
-endif
-endif
+# Flags for dlmalloc
+CFLAGS += -DMSPACES=1 -DONLY_MSPACES=1 -DUSE_LOCKS=1 -DUSE_SPIN_LOCKS=0 -DHAVE_MMAP=0 -Dmalloc_getpagesize=4096 -DMALLOC_FAILURE_ACTION= -DLACKS_TIME_H=1
 
 ifdef CONFIG_HEAP_TRACING
 

@@ -1,3 +1,32 @@
+# ESP-IDF modified to use dlmalloc
+
+The default memory allocator in ESP-IDF is self made by Espressif (at least so it seams). It is not very fast, and becomes very slow when memory gets fragmented. This problem becomes evident when using SPI RAM.
+
+This is a fork of ESP-IDF which was modified to use dlmalloc, an industry standard memory allocator. It is almost twice as fast as the default memory allocator, and does not slow down notably with fragmented memory.
+
+Following featues are not yet re-implemented:
+
+* Heap poisening
+* Heap task tracking
+
+********************************************************************************
+
+Our advertisment block:
+
+- Please take a look at www.lowjs.org for Node.JS on ESP32:
+scalable, feature rich programming of microcontrollers done easily
+
+- Please take a look at www.neonious.com for a great microcontroller board
+with Ethernet and Wifi
+wifi an integrated IDE + debugger on board
+and more!
+
+- Please take a look at our blog www.neonious-basics.com for interesting news
+and blog posts which educate you about electronics
+
+********************************************************************************
+
+
 # Espressif IoT Development Framework
 
 [![Documentation Status](https://readthedocs.com/projects/espressif-esp-idf/badge/?version=latest)](https://docs.espressif.com/projects/esp-idf/en/latest/?badge=latest)
