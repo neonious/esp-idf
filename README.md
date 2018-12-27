@@ -9,6 +9,8 @@ Following featues are not yet re-implemented:
 * Heap poisening
 * Heap task tracking
 
+Small test application: https://www.github.com/neonious/memtest
+
 ********************************************************************************
 
 Our advertisment block:
