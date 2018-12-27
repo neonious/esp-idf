@@ -1,6 +1,6 @@
 # ESP-IDF modified to use dlmalloc
 
-The default memory allocator in ESP-IDF is self made by Espressif (at least so it seams). It is not very fast, and becomes very slow when memory gets fragmented. This problem becomes evident when using SPI RAM.
+The default memory allocator in ESP-IDF is self made by Espressif (at least so it seems). It is not very fast, and becomes very slow when memory gets fragmented. This problem becomes evident when using SPI RAM.
 
 This is a fork of ESP-IDF which was modified to use dlmalloc, an industry standard memory allocator. It is almost twice as fast as the default memory allocator, and does not slow down notably with fragmented memory.
 
