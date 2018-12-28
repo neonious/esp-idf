@@ -4,7 +4,7 @@ set(COMPONENT_SRCS "heap_caps.c"
                    "multi_heap.c"
                    "malloc.c")
 
-set(CFLAGS -DMSPACES=1 -DONLY_MSPACES=1 -DUSE_LOCKS=1 -DUSE_SPIN_LOCKS=0 -DHAVE_MMAP=0 -Dmalloc_getpagesize=4096 -DMALLOC_FAILURE_ACTION=)
+set(CFLAGS -DMSPACES=1 -DONLY_MSPACES=1 -DUSE_LOCKS=2 -DUSE_SPIN_LOCKS=0 -DHAVE_MMAP=0 -Dmalloc_getpagesize=4096 -DMALLOC_FAILURE_ACTION=)
 
 set(COMPONENT_ADD_INCLUDEDIRS "include")
 set(COMPONENT_ADD_LDFRAGMENTS linker.lf)

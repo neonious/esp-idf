@@ -389,14 +389,20 @@ static FORCEINLINE int win32munmap(void* ptr, size_t size) {
 
 #else
 #if USE_LOCKS > 1
-/* -----------------------  User-defined locks ------------------------ */
-/* Define your own lock implementation here */
-/* #define INITIAL_LOCK(lk)  ... */
-/* #define DESTROY_LOCK(lk)  ... */
-/* #define ACQUIRE_LOCK(lk)  ... */
-/* #define RELEASE_LOCK(lk)  ... */
-/* #define TRY_LOCK(lk) ... */
-/* static MLOCK_T malloc_global_mutex = ... */
+
+#include <freertos/FreeRTOS.h>
+#include <rom/ets_sys.h>
+
+#define INITIAL_LOCK(l)            (*l = NULL)
+#define DESTROY_LOCK(l)            (0)
+
+/* Because malloc/free can happen inside an ISR context,
+   we need to use portmux spinlocks here not RTOS mutexes */
+#define ACQUIRE_LOCK(PLOCK) (*(PLOCK) ? (portENTER_CRITICAL((portMUX_TYPE *)*(PLOCK)), 0) : 0)
+#define RELEASE_LOCK(PLOCK) (*(PLOCK) ? portEXIT_CRITICAL((portMUX_TYPE *)*(PLOCK)) : 0)
+
+typedef void *MLOCK_T;
+static MLOCK_T malloc_global_mutex;
 
 #elif USE_SPIN_LOCKS
 
@@ -3984,8 +3990,7 @@ static mstate init_user_mstate(char* tbase, size_t tsize) {
   mchunkptr msp = align_as_chunk(tbase);
   mstate m = (mstate)(chunk2mem(msp));
   memset(m, 0, msize);
-  m->mutex = PTHREAD_MUTEX_INITIALIZER;
-//  (void)INITIAL_LOCK(&m->mutex);
+  (void)INITIAL_LOCK(&m->mutex);
   msp->head = (msize|INUSE_BITS);
   m->seg.base = m->least_addr = tbase;
   m->seg.size = m->footprint = m->max_footprint = tsize;
@@ -4033,6 +4038,12 @@ mspace create_mspace_with_base(void* base, size_t capacity, int locked) {
     set_lock(m, locked);
   }
   return (mspace)m;
+}
+
+void mspace_set_lock(mspace msp, void *lock)
+{
+    mstate ms = (mstate)msp;
+    ms->mutex = lock;
 }
 
 int mspace_track_large_chunks(mspace msp, int enable) {

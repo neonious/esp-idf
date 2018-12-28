@@ -72,7 +72,7 @@ size_t multi_heap_get_allocated_size_impl(multi_heap_handle_t heap, void *p)
 
 multi_heap_handle_t multi_heap_register_impl(void *start_ptr, size_t size)
 {
-    multi_heap_handle_t heap = create_mspace_with_base(start_ptr, size, 0);
+    multi_heap_handle_t heap = create_mspace_with_base(start_ptr, size, 1);
     mspace_track_large_chunks(heap, 1);
 
     return heap;
@@ -80,7 +80,7 @@ multi_heap_handle_t multi_heap_register_impl(void *start_ptr, size_t size)
 
 void multi_heap_set_lock(multi_heap_handle_t heap, void *lock)
 {
-    // no-op. dlmalloc knows when to use the lock
+    mspace_set_lock(heap, lock);
 }
 
 void *multi_heap_malloc_impl(multi_heap_handle_t heap, size_t size)
